@@ -49,8 +49,12 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
       res_x = x / cellSizeBottom + 1;
       res_y = y / cellSizeRight + 1;
 
-      if (x < 501 && y < 501) {
-        if (countClickMouse_ == 0 || countClickMouse_ == 2) {
+      if (x < 501 &&
+          y < 501) {  // возможно здесь не правильно стоят фигурный скобки
+        if ((countClickMouse_ == 0 || countClickMouse_ == 2) &&
+            (finish_x != res_x &&
+             finish_y !=
+                 res_y)) {  // попробовал не обрабатывать клики в одной точке
           mazeData.set_start_point(res_x, res_y);
           countClickMouse_++;
 
