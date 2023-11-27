@@ -35,9 +35,9 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private slots:
-  void on_Generate_clicked();
-  void on_OpenMaze_clicked();
-  void on_SaveMaze_clicked();
+  void GenerateMaze();
+  void OpenMaze();
+  void SaveMaze();
   void findRoute();
 
   void on_Size_x_valueChanged(int arg1);
@@ -45,6 +45,7 @@ class MainWindow : public QMainWindow {
 
  private:
   void mousePressEvent(QMouseEvent *event);
+  void SetupButtons();
   int countClickMouse_ = 0;  // подсчет количества кликов мыши
   bool mazeLoaded_ = false;
   Ui::MainWindow *ui;

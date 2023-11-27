@@ -7,6 +7,7 @@ namespace s21 {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  SetupButtons();
   drawingWidget = new DrawingWidget(this);
 }
 
@@ -14,6 +15,15 @@ MainWindow::~MainWindow() { delete ui; }
 
 MazeData mazeData;
 int flag = 0;
+
+/**
+ * @brief назначение кнопок интерфейса
+ */
+void MainWindow::SetupButtons() {
+  connect(ui->Generate, SIGNAL(clicked()), this, SLOT(GenerateMaze()));
+  connect(ui->OpenMaze, SIGNAL(clicked()), this, SLOT(OpenMaze()));
+  connect(ui->SaveMaze, SIGNAL(clicked()), this, SLOT(SaveMaze()));
+}
 
 /**
  * @brief 'слушает' в какой ячейке лабиринта нажимается мышь
@@ -150,7 +160,7 @@ void DrawingWidget::paintEvent(QPaintEvent *event) {
 /**
  * @brief открывает файл .txt с описанием лабиринта
  */
-void MainWindow::on_OpenMaze_clicked() {
+void MainWindow::OpenMaze() {
   countClickMouse_ = 0;
   mazeData.CleanPath();
   QString desktopPath =
@@ -313,7 +323,7 @@ void MazeData::CleanPath() { this->path_.clear(); }
  * @brief сохранение текущего лабиринта в .txt формат
  * при нажатии кнопки 'Сохранить'
  */
-void MainWindow::on_SaveMaze_clicked() {
+void MainWindow::SaveMaze() {
   if (mazeData.matrixBottom.size() != 0 && mazeData.matrixRight.size() != 0) {
     QString saveFilePath = QFileDialog::getSaveFileName(
         nullptr, "Save as", "", "Text file (*.txt);;All file (*.*)");
@@ -334,7 +344,7 @@ void MainWindow::on_SaveMaze_clicked() {
  * @brief создание и прорисовка лабиринта
  * при нажатии кнопки 'Создать'
  */
-void MainWindow::on_Generate_clicked() {
+void MainWindow::GenerateMaze() {
   countClickMouse_ = 0;
   mazeData.CleanPath();
   mazeData.set_length(ui->Size_x->value());
