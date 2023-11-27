@@ -46,6 +46,7 @@ class MainWindow : public QMainWindow {
  private:
   void mousePressEvent(QMouseEvent *event);
   int countClickMouse_ = 0;  // подсчет количества кликов мыши
+  bool mazeLoaded_ = false;
   Ui::MainWindow *ui;
   DrawingWidget *drawingWidget;
 };

@@ -24,51 +24,52 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
   int x = 0, y = 0;
   int res_x = 0, res_y = 0;
   int finish_x = 0, finish_y = 0;
+  if (mazeLoaded_) {
+    // размер ячейки лабиринта в высоту в пикселях
+    float cellSizeBottom = 500.0 / mazeData.get_width();
+    // размер ячейки лабиринта в ширину в пикселях
+    float cellSizeRight = 500.0 / mazeData.get_length();
+    // если нажали левой кнопкой мыши
+    if (event->button() == Qt::LeftButton) {
+      // записываем координаты мыши в пикселях
+      x = event->pos().x();
+      y = event->pos().y();
 
-  // размер ячейки лабиринта в высоту в пикселях
-  float cellSizeBottom = 500.0 / mazeData.get_width();
-  // размер ячейки лабиринта в ширину в пикселях
-  float cellSizeRight = 500.0 / mazeData.get_length();
-  // если нажали левой кнопкой мыши
-  if (event->button() == Qt::LeftButton) {
-    // записываем координаты мыши в пикселях
-    x = event->pos().x();
-    y = event->pos().y();
+      // координаты середины ячейки
+      res_x = x / cellSizeBottom + 1;
+      res_y = y / cellSizeRight + 1;
 
-    // координаты середины ячейки
-    res_x = x / cellSizeBottom + 1;
-    res_y = y / cellSizeRight + 1;
+      if (x < 501 && y < 501) {
+        if (countClickMouse_ == 0 || countClickMouse_ == 2) {
+          mazeData.set_start_point(res_x, res_y);
+          countClickMouse_++;
 
-    if (x < 501 && y < 501) {
-      if (countClickMouse_ == 0 || countClickMouse_ == 2) {
-        mazeData.set_start_point(res_x, res_y);
-        countClickMouse_++;
-
-        if (countClickMouse_ == 3) {
-          finish_x = 0;
-          finish_y = 0;
-          mazeData.CleanPath();
-          QWidget::update();
-          countClickMouse_ = 1;
+          if (countClickMouse_ == 3) {
+            finish_x = 0;
+            finish_y = 0;
+            mazeData.CleanPath();
+            QWidget::update();
+            countClickMouse_ = 1;
+          }
+        } else {
+          finish_x = res_x;
+          finish_y = res_y;
+          mazeData.set_finish_point(finish_x, finish_y);
+          countClickMouse_++;
         }
-      } else {
-        finish_x = res_x;
-        finish_y = res_y;
-        mazeData.set_finish_point(finish_x, finish_y);
-        countClickMouse_++;
       }
+      if (countClickMouse_ == 2) {
+        findRoute();
+      }
+    } else {
+      event->ignore();
+      finish_x = 0;
+      finish_y = 0;
+      res_x = 0;
+      res_y = 0;
+      mazeData.CleanPath();
+      countClickMouse_ = 0;
     }
-    if (countClickMouse_ == 2) {
-      findRoute();
-    }
-  } else {
-    event->ignore();
-    finish_x = 0;
-    finish_y = 0;
-    res_x = 0;
-    res_y = 0;
-    mazeData.CleanPath();
-    countClickMouse_ = 0;
   }
 }
 
@@ -150,6 +151,7 @@ void DrawingWidget::paintEvent(QPaintEvent *event) {
  * @brief открывает файл .txt с описанием лабиринта
  */
 void MainWindow::on_OpenMaze_clicked() {
+  countClickMouse_ = 0;
   mazeData.CleanPath();
   QString desktopPath =
       QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
@@ -162,6 +164,7 @@ void MainWindow::on_OpenMaze_clicked() {
     ui->Size_y->setValue(mazeData.get_width());
     mazeData.set_start_point(0, 0);
     mazeData.set_finish_point(0, 0);
+    mazeLoaded_ = true;
     QWidget::update();
   }
 }
@@ -332,6 +335,7 @@ void MainWindow::on_SaveMaze_clicked() {
  * при нажатии кнопки 'Создать'
  */
 void MainWindow::on_Generate_clicked() {
+  countClickMouse_ = 0;
   mazeData.CleanPath();
   mazeData.set_length(ui->Size_x->value());
   mazeData.set_width(ui->Size_y->value());
@@ -351,6 +355,8 @@ void MainWindow::on_Generate_clicked() {
   mazeData.set_finish_point(0, 0);
   flag = 1;
   if (mazeData.get_length() > 0 && mazeData.get_width() > 0) {
+    countClickMouse_ = 0;
+    mazeLoaded_ = true;
     QWidget::update();
   }
 }
