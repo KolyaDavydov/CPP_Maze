@@ -195,8 +195,8 @@ std::vector<s21::PathFinder::Point> s21::PathFinder::findPath(
       int next_y = y + dy;
 
       // если если предполагаемый ход выходит за пределы лабиринта - пропуск
-      if (next_x < 0 || next_x >= (int)rightWalls.size() || next_y < 0 ||
-          next_y >= (int)rightWalls[0].size()) {
+      if (next_x < 0 || next_x >= (int)rightWalls[0].size() || next_y < 0 ||
+          next_y >= (int)rightWalls.size()) {
         continue;
       }
       // если предполагаемый ход вниз, но стоит стенка - пропуск

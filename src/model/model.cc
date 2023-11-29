@@ -165,6 +165,9 @@ void Maze::endLineCheck() {
       rightWalls_[rows_ - 1][i] = 0;
       mergeSet(currentLine_[i], currentLine_[i + 1]);
     }
+    
+  }
+  for (int i = 0; i < cols_; ++i) {
     bottomWalls_[rows_ - 1][i] = 1;
   }
   rightWalls_[rows_ - 1][cols_ - 1] = 1;
