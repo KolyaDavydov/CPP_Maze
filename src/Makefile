@@ -68,6 +68,9 @@ cppcheck:
 leaks: tests
 	CK_FORK=no valgrind $(VALGRIND_FLAGS) --log-file=RESULT_VALGRIND.txt ./run
 
+leak: install
+	CK_FORK=no valgrind $(VALGRIND_FLAGS) --log-file=RESULT_VALGRIND.txt ./../build/Maze
+
 clean:
 	rm -rf *.o \
 					*.a \

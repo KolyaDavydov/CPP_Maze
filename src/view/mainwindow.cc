@@ -422,9 +422,12 @@ int MazeData::GetValues() {
     for (size_t it = 0; it < get_length(); ++it) {
       checking_line = in.readLine().toStdString();
       if (checking_line.size() != get_width() * 2) {
+        // std::cout << "SOME" << std::endl;
         error = 1;
+        file.close();
         return error;
       }
+      std::cout << "SOME1" << std::endl;
       FillMatrixRight(checking_line);
     }
 
@@ -434,6 +437,7 @@ int MazeData::GetValues() {
       checking_line = in.readLine().toStdString();
       if (checking_line.size() != get_width() * 2) {
         error = 1;
+        file.close();
         return error;
       }
       FillMatrixBottom(checking_line);
