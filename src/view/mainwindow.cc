@@ -281,8 +281,9 @@ void MainWindow::OpenMaze() {
       mazeLoaded_ = true;
       QWidget::update();
     } else {
+      mazeLoaded_ = false;
       QMessageBox::warning(this, "Предупреждение",
-                            "Некорректный файл");
+                            "Некорректный файл! Пересоздайте лабиринт или откройти корректный файл");
     }
   }
 }

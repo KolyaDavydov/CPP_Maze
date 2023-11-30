@@ -132,7 +132,7 @@ std::vector<s21::PathFinder::Point> s21::PathFinder::findPath(
   // далее запоняется правильными ходами числами попорядку
   std::vector<std::vector<int>> wave(rightWalls.size(),
                                      std::vector<int>(rightWalls[0].size(), 0));
-
+  wave[start_.y_][start.x_] = 1;
   while (!q.empty()) {
     Point current = q.front();  // текущая координата
     q.pop();
@@ -153,19 +153,19 @@ std::vector<s21::PathFinder::Point> s21::PathFinder::findPath(
 
         // последовательно идем по матрице 'wave' от большего к меньшему
         if (x > 0 && wave[y][x-1] == wave[y][x] - 1 &&
-            rightWalls[y][x-1] == 0) {
+            rightWalls[y][x-1] == 0/* && visited[y][x-1] == true*/) {
           dx = -1;
 //         if (x > 0 && wave[x - 1][y] == wave[x][y] - 1 &&
 //             downWalls[x - 1][y] == 0) {
 //           dx = -1;
         } else if (x < (int)rightWalls[0].size() - 1 &&
-                   wave[y][x+1] == wave[y][x] - 1 && rightWalls[y][x] == 0) {
+                   wave[y][x+1] == wave[y][x] - 1 && rightWalls[y][x] == 0/* && visited[y][x] == true */) {
           dx = 1;
         } else if (y > 0 && wave[y - 1][x] == wave[y][x] - 1 &&
-                   downWalls[y - 1][x] == 0) {
+                   downWalls[y - 1][x] == 0/* && visited[y - 1][x] == true*/) {
           dy = -1;
         } else if (y < (int)rightWalls.size() - 1 &&
-                   wave[y+1][x] == wave[y][x] - 1 && downWalls[y][x] == 0) {
+                   wave[y+1][x] == wave[y][x] - 1 && downWalls[y][x] == 0/* && visited[y][x] == true*/) {
           dy = 1;
         }
         x += dx;
