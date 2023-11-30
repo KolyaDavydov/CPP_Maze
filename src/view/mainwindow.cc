@@ -272,13 +272,18 @@ void MainWindow::OpenMaze() {
                                                         desktopPath, "(*.txt)");
   QFile file(mazeData.path_to_file_);
   if (file.exists()) {
-    mazeData.GetValues();
-    ui->Size_x->setValue(mazeData.get_width());
-    ui->Size_y->setValue(mazeData.get_length());
-    mazeData.set_start_point(0, 0);
-    mazeData.set_finish_point(0, 0);
-    mazeLoaded_ = true;
-    QWidget::update();
+    int error = mazeData.GetValues();
+    if (error == 0) {
+      ui->Size_x->setValue(mazeData.get_width());
+      ui->Size_y->setValue(mazeData.get_length());
+      mazeData.set_start_point(0, 0);
+      mazeData.set_finish_point(0, 0);
+      mazeLoaded_ = true;
+      QWidget::update();
+    } else {
+      QMessageBox::warning(this, "Предупреждение",
+                            "Некорректный файл");
+    }
   }
 }
 
@@ -305,7 +310,8 @@ void MazeData::CheckingDataBeforeFill() {
  * в соответтсвующие поля класса MazeData
  * @param parametrs_string первая строка из .txt файла с шириной и высотой
  */
-void MazeData::GetMatrixParametrs(std::string parametrs_string) {
+int MazeData::GetMatrixParametrs(std::string parametrs_string) {
+  int error = 0;
   std::string number_one = "\0";
   std::string number_two = "\0";
   size_t i = 0;
@@ -330,6 +336,10 @@ void MazeData::GetMatrixParametrs(std::string parametrs_string) {
   }
   set_length(std::stod(number_one));
   set_width(std::stod(number_two));
+  if (get_length() <= 1 || get_length() > 50 || get_width() <= 1 || get_width() > 50) {
+    error = 1;
+  }
+  return error;
 }
 
 /**
@@ -391,7 +401,8 @@ void MazeData::FillMatrixBottom(std::string data_string) {
  * @brief Переносит данные (где стенки лабиринта) из .txt
  * в соответствующие поля класса MazeData
  */
-void MazeData::GetValues() {
+int MazeData::GetValues() {
+  int error = 0;
   QFile file(path_to_file_);
 
   CheckingDataBeforeFill();
@@ -400,10 +411,14 @@ void MazeData::GetValues() {
     QTextStream in(&file);
     std::string checking_line;
     checking_line = in.readLine().toStdString();
-    GetMatrixParametrs(checking_line);
+    error = GetMatrixParametrs(checking_line);
 
     for (size_t it = 0; it < get_length(); ++it) {
       checking_line = in.readLine().toStdString();
+      if (checking_line.size() != get_width() * 2) {
+        error = 1;
+        return error;
+      }
       FillMatrixRight(checking_line);
     }
 
@@ -411,10 +426,15 @@ void MazeData::GetValues() {
 
     for (size_t it = 0; it < get_length(); ++it) {
       checking_line = in.readLine().toStdString();
+      if (checking_line.size() != get_width() * 2) {
+        error = 1;
+        return error;
+      }
       FillMatrixBottom(checking_line);
     }
     file.close();
   }
+  return error;
 }
 
 /**

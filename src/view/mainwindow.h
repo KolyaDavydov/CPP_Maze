@@ -89,9 +89,9 @@ class MazeData {
   std::vector<s21::Controller::Point> get_path();
 
   // методы
-  void GetValues();
+  int GetValues();
   void CheckingDataBeforeFill();
-  void GetMatrixParametrs(std::string parametrs_string);
+  int GetMatrixParametrs(std::string parametrs_string);
   void FillMatrixRight(std::string data_string);
   void FillMatrixBottom(std::string data_string);
   void CleanPath();
