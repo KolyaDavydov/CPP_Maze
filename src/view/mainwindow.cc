@@ -49,33 +49,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
       res_x = x / cellSizeBottom + 1;
       res_y = y / cellSizeRight + 1;
 
-      if (x < 501 &&
-          y < 501) {  // возможно здесь не правильно стоят фигурный скобки
-        //   if ((countClickMouse_ == 0 || countClickMouse_ == 2) &&
-        //       (finish_x != res_x &&
-        //        finish_y !=
-        //            res_y)) {  // попробовал не обрабатывать клики в одной
-        //            точке
-        //     mazeData.set_start_point(res_x, res_y);
-        //     countClickMouse_++;
-
-        //     if (countClickMouse_ == 3) {
-        //       finish_x = 0;
-        //       finish_y = 0;
-        //       mazeData.CleanPath();
-        //       QWidget::update();
-        //       countClickMouse_ = 1;
-        //     }
-        //   } else {
-        //     finish_x = res_x;
-        //     finish_y = res_y;
-        //     mazeData.set_finish_point(finish_x, finish_y);
-        //     countClickMouse_++;
-        //   }
-        // }
-        // if (countClickMouse_ == 2) {
-        //   findRoute();
-        // }
+      if (x < 501 && y < 501) {
         countClickMouse_++;
         if (countClickMouse_ == 1) {
           mazeData.set_start_point(res_x, res_y);
@@ -85,32 +59,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
           findRoute();
           countClickMouse_ = 0;
         }
-        //       if ((countClickMouse_ == 0 || countClickMouse_ == 2) &&
-        //       (finish_x != res_x &&
-        //        finish_y !=
-        //            res_y)) {  // попробовал не обрабатывать клики в одной
-        //            точке
-        //     mazeData.set_start_point(res_x, res_y);
-        //     countClickMouse_++;
-
-        //     if (countClickMouse_ == 3) {
-        //       finish_x = 0;
-        //       finish_y = 0;
-        //       mazeData.CleanPath();
-        //       QWidget::update();
-        //       countClickMouse_ = 1;
-        //     }
-        //   } else {
-        //     finish_x = res_x;
-        //     finish_y = res_y;
-        //     mazeData.set_finish_point(finish_x, finish_y);
-        //     countClickMouse_++;
-        //   }
-        // }
-        // if (countClickMouse_ == 2) {
-        //   findRoute();
-        // }
-
       } else {
         event->ignore();
         finish_x = 0;
@@ -131,73 +79,22 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
  */
 void MainWindow::findRoute() {
   MazeData::Point point = mazeData.get_start_point();
-  // s21::PathFinder::Point start;
   s21::Controller::Point start;
   start.x_ = point.x - 1;
   start.y_ = point.y - 1;
   point = mazeData.get_finish_point();
-  // s21::PathFinder::Point end;
+
   s21::Controller::Point end;
   end.x_ = point.x - 1;
   end.y_ = point.y - 1;
 
-  // s21::PathFinder pathFinder(mazeData.matrixRight, mazeData.matrixBottom);
   s21::Controller controller(mazeData.matrixRight, mazeData.matrixBottom);
-  // std::vector<s21::PathFinder::Point> path =
-  //     pathFinder.findPath(mazeData.matrixRight, mazeData.matrixBottom, start,
-  //     end);
+
   std::vector<s21::Controller::Point> path = controller.findPath(
       mazeData.matrixRight, mazeData.matrixBottom, start, end);
   mazeData.set_path(path);
   QWidget::update();
 }
-
-// void DrawingWidget::paintEvent(QPaintEvent *event) {
-//   QPainter painter(this);
-
-//   if (mazeData.path_to_file_ != "\0" || flag == 1) {
-//     painter.fillRect(rect(), Qt::gray);
-//     painter.setPen(QPen(Qt::black, 2));
-
-//     float cellSizeVertic = 500.0 / mazeData.get_length();
-//     float cellSizeHorizont = 500.0 / mazeData.get_width();
-
-//     painter.drawRect(0, 0, 500, 500);
-//     for (int i = 0; i < mazeData.matrixRight[0].size(); i++) {
-//       for (int j = 0; j < mazeData.matrixRight.size(); j++) {
-//         int x = j * cellSizeHorizont;
-//         int y = i * cellSizeVertic;
-
-//         if (mazeData.matrixRight[j][i]) {
-//           painter.drawLine(x, y + cellSizeVertic, x + cellSizeHorizont,
-//                            y + cellSizeVertic);
-//         }
-
-//         if (mazeData.matrixBottom[j][i]) {
-//           painter.drawLine(x + cellSizeHorizont, y, x + cellSizeHorizont,
-//                            y + cellSizeVertic);
-//         }
-//       }
-//     }
-//     painter.setPen(QPen(Qt::green, 2));
-
-//     if (mazeData.get_path_size() > 1) {
-//       // std::vector<s21::PathFinder::Point> current_path =
-//       mazeData.get_path(); std::vector<s21::Controller::Point> current_path =
-//       mazeData.get_path();
-
-//       for (unsigned int i = 0; i < current_path.size() - 1; ++i) {
-//         int startX =
-//             current_path[i].x_ * cellSizeHorizont + cellSizeHorizont / 2;
-//         int startY = current_path[i].y_ * cellSizeVertic + cellSizeVertic /
-//         2; int endX =
-//             current_path[i + 1].x_ * cellSizeHorizont + cellSizeHorizont / 2;
-//         int endY = current_path[i + 1].y_ * cellSizeVertic + cellSizeVertic /
-//         2; painter.drawLine(startX, startY, endX, endY);
-//       }
-//     }
-//   }
-// }
 
 void DrawingWidget::paintEvent(QPaintEvent *event) {
   QPainter painter(this);
@@ -212,36 +109,21 @@ void DrawingWidget::paintEvent(QPaintEvent *event) {
     painter.drawRect(0, 0, 500, 500);
     for (int row = 0; row < mazeData.get_length(); ++row) {
       for (int col = 0; col < mazeData.get_width(); ++col) {
-        // int x = j * cellSizeHorizont;
-        // int y = i * cellSizeVertic;
-
         if (mazeData.matrixRight[row][col] == 1) {
           painter.drawLine((col + 1) * cellSizeHorizont, row * cellSizeVertic,
                            (col + 1) * cellSizeHorizont,
                            (row + 1) * cellSizeVertic);
-          // painter.drawLine(x, y + cellSizeVertic, x + cellSizeHorizont,
-          //                  y + cellSizeVertic);
         }
         if (mazeData.matrixBottom[row][col] == 1) {
           painter.drawLine(col * cellSizeHorizont, (row + 1) * cellSizeVertic,
                            (col + 1) * cellSizeHorizont,
                            (row + 1) * cellSizeVertic);
         }
-
-        // if (mazeData.matrixBottom[j][i]) {
-        //   painter.drawLine(x + cellSizeHorizont, y, x + cellSizeHorizont,
-        //                    y + cellSizeVertic);
-        //   // painter.drawLine(x + cellSizeHorizont, y, x + cellSizeHorizont,
-        //   //                  y + cellSizeVertic);
-        // }
       }
     }
-    // painter.end();
-    // painter.begin(this);
     painter.setPen(QPen(Qt::green, 2));
 
     if (mazeData.get_path_size() > 1) {
-      // std::vector<s21::PathFinder::Point> current_path = mazeData.get_path();
       std::vector<s21::Controller::Point> current_path = mazeData.get_path();
 
       for (unsigned int i = 0; i < current_path.size() - 1; ++i) {
@@ -253,14 +135,8 @@ void DrawingWidget::paintEvent(QPaintEvent *event) {
         int endY = current_path[i + 1].y_ * cellSizeVertic + cellSizeVertic / 2;
         painter.drawLine(startX, startY, endX, endY);
       }
-      //      QMessageBox::information(this, "Информация", "Маршрут построен");
-    }/* else if (mazeData.get_path_size() == 1) {
-      QMessageBox::warning(this, "Предупреждение",
-                           "Начальные и конечные точки должны быть разными");
-    }*/
+    }
   }
-  // painter.end();
-  // painter.endNativePainting();
 }
 
 /**
@@ -422,12 +298,10 @@ int MazeData::GetValues() {
     for (size_t it = 0; it < get_length(); ++it) {
       checking_line = in.readLine().toStdString();
       if (checking_line.size() != get_width() * 2) {
-        // std::cout << "SOME" << std::endl;
         error = 1;
         file.close();
         return error;
       }
-      std::cout << "SOME1" << std::endl;
       FillMatrixRight(checking_line);
     }
 
