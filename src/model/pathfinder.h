@@ -32,11 +32,6 @@ class PathFinder {
   const std::vector<s21::PathFinder::Point>& getPath() { return path_; }
 
  private:
-  //  int Wave(std::vector<std::vector<Finder>> *lab, PathFinder::Point start,
-  //          PathFinder::Point finish);
-  // std::stack<PathFinder::Point> FindWay(std::vector<std::vector<Finder>> lab,
-  //                                         int n, PathFinder::Point start,
-  //                                         PathFinder::Point finish);
   Point start_;
   Point end_;
   std::vector<PathFinder::Point> path_;

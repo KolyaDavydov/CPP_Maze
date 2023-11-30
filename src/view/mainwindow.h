@@ -16,7 +16,6 @@
 #include <vector>
 
 #include "../controller/controller.h"
-#include "../model/model.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -74,7 +73,6 @@ class MazeData {
   // Сеттеры
   void set_width(int value);
   void set_length(int value);
-  // void set_path(std::vector<s21::PathFinder::Point> current_path);
   void set_path(std::vector<s21::Controller::Point> current_path);
   void set_start_point(int x, int y);
   void set_finish_point(int x, int y);
@@ -85,7 +83,6 @@ class MazeData {
   MazeData::Point get_start_point();
   MazeData::Point get_finish_point();
   int get_path_size();
-  // std::vector<s21::PathFinder::Point> get_path();
   std::vector<s21::Controller::Point> get_path();
 
   // методы
@@ -107,7 +104,6 @@ class MazeData {
   size_t length_ = 10;
   Point start_;
   Point finish_;
-  // std::vector<s21::PathFinder::Point> path_;
   std::vector<s21::Controller::Point> path_;
 };
 };      // namespace s21
