@@ -254,10 +254,10 @@ void DrawingWidget::paintEvent(QPaintEvent *event) {
         painter.drawLine(startX, startY, endX, endY);
       }
       //      QMessageBox::information(this, "Информация", "Маршрут построен");
-    } else if (mazeData.get_path_size() == 1) {
+    }/* else if (mazeData.get_path_size() == 1) {
       QMessageBox::warning(this, "Предупреждение",
                            "Начальные и конечные точки должны быть разными");
-    }
+    }*/
   }
   // painter.end();
   // painter.endNativePainting();
